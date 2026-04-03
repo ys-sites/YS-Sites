@@ -24,10 +24,10 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        'fixed top-4 left-4 right-4 z-50 transition-all duration-300 border rounded-2xl',
-        isScrolled 
-          ? 'bg-black/80 backdrop-blur-md md:backdrop-blur-lg border-white/10 py-4 shadow-lg' 
-          : 'bg-transparent border-transparent py-4'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b',
+        isScrolled
+          ? 'bg-black/80 backdrop-blur-md md:backdrop-blur-lg border-white/10 shadow-lg py-4'
+          : 'bg-transparent border-transparent py-6'
       )}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
