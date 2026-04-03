@@ -9,26 +9,31 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
           {/* Logo and Description */}
           <div>
-            <button 
-              onClick={() => window.location.reload()} 
-              className="flex items-center gap-3 mb-6 cursor-pointer hover:opacity-80 transition-opacity"
-            >
-              <span className="font-bold text-xl tracking-tight">YS Marketing Solutions</span>
-            </button>
-            <p className="text-zinc-400 text-base leading-relaxed mb-8 max-w-md">
-              We engineer high-performance digital experiences that transform visitors into loyal customers. By combining cutting-edge design with data-driven strategy, we help ambitious brands scale their online presence and dominate their market.
-            </p>
-            <div className="flex gap-3">
-              <a
-                href="https://www.instagram.com/ys.sites/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 rounded-xl border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/10 transition-colors duration-200 cursor-pointer"
-                aria-label="Instagram"
+            {/* Logo image + description side by side */}
+            <div className="flex items-start gap-5 mb-6">
+              <button
+                onClick={() => window.location.reload()}
+                className="shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
               >
-                <Instagram className="w-6 h-6" />
-              </a>
+                <img src="/YS.png" alt="YS Marketing Solutions" className="h-14 w-auto" />
+              </button>
+              <p className="text-zinc-400 text-base leading-relaxed max-w-sm">
+                We engineer high-performance digital experiences that transform visitors into loyal customers. By combining cutting-edge design with data-driven strategy, we help ambitious brands scale their online presence and dominate their market.
+              </p>
             </div>
+            {/* Instagram below logo */}
+            <a
+              href="https://www.instagram.com/ys.sites/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 text-zinc-400 hover:text-white transition-colors duration-200 cursor-pointer group"
+              aria-label="Instagram"
+            >
+              <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors duration-200">
+                <Instagram className="w-5 h-5" />
+              </div>
+              <span className="text-sm font-medium">@ys.sites</span>
+            </a>
           </div>
 
           {/* Contact Info Section */}

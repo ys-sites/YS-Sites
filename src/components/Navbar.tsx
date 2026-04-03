@@ -36,6 +36,7 @@ export default function Navbar() {
           className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
         >
           <img src="/YS.png" alt="YS Marketing Solutions" className="h-10 w-auto" />
+          <span className="text-xl font-bold tracking-tight">YS Marketing Solutions</span>
         </button>
 
         {/* Desktop Nav */}
