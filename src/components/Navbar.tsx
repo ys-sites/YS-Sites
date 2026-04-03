@@ -35,7 +35,7 @@ export default function Navbar() {
           onClick={() => window.location.reload()} 
           className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
         >
-          <span className="text-xl font-bold tracking-tight">YS Marketing Solutions</span>
+          <img src="/YS.png" alt="YS Marketing Solutions" className="h-10 w-auto" />
         </button>
 
         {/* Desktop Nav */}
