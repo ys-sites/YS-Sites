@@ -95,7 +95,23 @@ export default function ContactSection() {
             throw new Error(`Webhook request failed with status ${response.status}`);
           }
 
-          // Webhook succeeded
+          const responseText = await response.text();
+          let responseData: { id?: string; status?: string } = {};
+
+          try {
+            responseData = responseText ? JSON.parse(responseText) : {};
+          } catch {
+            responseData = {};
+          }
+
+          const hasExecutionId = typeof responseData.id === 'string' && responseData.id.length > 0;
+          const statusText = responseData.status ?? '';
+          const indicatesExecution = statusText.toLowerCase().includes('trigger execution server');
+
+          if (!hasExecutionId && !indicatesExecution) {
+            throw new Error('Webhook accepted request but did not trigger workflow execution. Verify this is the published production webhook URL, not a test endpoint.');
+          }
+
           lastError = null;
           break;
         } catch (error) {
