@@ -26,7 +26,7 @@ export default function Navbar() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b',
         isScrolled
-          ? 'bg-black/80 backdrop-blur-md md:backdrop-blur-lg border-white/10 shadow-lg py-4'
+          ? 'bg-black/70 backdrop-blur-xl border-white/10 shadow-lg py-4'
           : 'bg-transparent border-transparent py-6'
       )}
     >
@@ -35,7 +35,7 @@ export default function Navbar() {
           onClick={() => window.location.reload()} 
           className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
         >
-          <img src="/YS.png" alt="YS Marketing Solutions" className="h-10 w-auto" />
+          <img src="/YS.png" alt="YS Marketing Solutions" className="h-14 w-auto" />
           <span className="text-xl font-bold tracking-tight">YS Marketing Solutions</span>
         </button>
 

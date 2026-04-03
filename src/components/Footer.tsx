@@ -11,7 +11,7 @@ export default function Footer() {
   return (
     <footer className="bg-black pt-20 pb-10 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_auto_auto] gap-10 mb-12">
 
           {/* Col 1: Logo + Name + Social */}
           <div className="flex items-start gap-4 md:col-span-1">
@@ -22,7 +22,7 @@ export default function Footer() {
               <img src="/YS.png" alt="YS Marketing Solutions" className="h-20 w-auto" />
             </button>
             <div className="flex flex-col justify-center gap-3 pt-1">
-              <span className="text-xl font-bold tracking-tight leading-snug">YS Marketing Solutions</span>
+              <span className="text-xl font-bold tracking-tight leading-snug whitespace-nowrap">YS Marketing Solutions</span>
               <div className="flex items-center gap-2">
                 <a
                   href="https://www.instagram.com/ys.sites/"
