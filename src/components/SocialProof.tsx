@@ -7,7 +7,7 @@ const testimonials = [
     name: "Janette's Spicy Caribbean Food",
     role: 'Google Review',
     content: 'Ys Marketing Solutions seems to really stand out in terms of customer service and product quality, honestly the people there are easy to work with, kind and they actually take their time to understand your needs. Final product turns out amazing. Overall, 5/5. Very underrated.',
-    image: 'https://i.pravatar.cc/150?u=janettes-spicy-caribbean-food',
+    image: '/store.jpg',
   },
   {
     name: 'Michael',
