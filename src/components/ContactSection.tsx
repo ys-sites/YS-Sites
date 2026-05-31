@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
 import { Heart, ShoppingCart, CheckCircle2, AlertCircle } from 'lucide-react';
 
-const WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RnC5wPRRY4UMzJxMbcg4/webhook-trigger/81fb41cd-51ad-4c85-8fe6-dd1e66478885';
+const WEBHOOK_URL = 'https://hook.us2.make.com/9z1ldu1b99eooozbpe3a4u99p5b19ji2';
 const MAX_RETRIES = 3;
 const REQUEST_TIMEOUT_MS = 10000;
 
