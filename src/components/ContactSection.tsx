@@ -3,10 +3,7 @@ import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-mot
 import { Heart, ShoppingCart, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const WEBHOOK_URL = 'https://hook.us2.make.com/9z1ldu1b99eooozbpe3a4u99p5b19ji2';
-const MAX_RETRIES = 3;
 const REQUEST_TIMEOUT_MS = 10000;
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export default function ContactSection() {
   const formRef = useRef<HTMLDivElement>(null);
@@ -38,18 +35,25 @@ export default function ContactSection() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // Ref-based lock prevents double-fire from rapid clicks or React strict-mode double-invoke
+  const isSubmittingRef = useRef(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (status === 'submitting') {
+    // Hard guard: if a request is already in-flight, do nothing
+    if (isSubmittingRef.current || status === 'submitting') {
       return;
     }
 
+    isSubmittingRef.current = true;
     setErrorMessage('');
     setStatus('submitting');
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
     try {
-      // Format payload for LeadConnector/GoHighLevel
       const firstName = formData.fullName.split(' ')[0] || '';
       const lastName = formData.fullName.split(' ').slice(1).join(' ');
 
@@ -72,61 +76,18 @@ export default function ContactSection() {
         form_name: 'Website Contact Form',
       };
 
-      // Retry transient failures to improve reliability on spotty connections.
-      let lastError: Error | null = null;
+      // Single POST — Make.com returns 200/accepted on success, no retry needed
+      const response = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+        keepalive: true,
+      });
 
-      for (let attempt = 1; attempt <= MAX_RETRIES; attempt += 1) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-
-        try {
-          const response = await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-            signal: controller.signal,
-            keepalive: true,
-          });
-
-          if (!response.ok) {
-            throw new Error(`Webhook request failed with status ${response.status}`);
-          }
-
-          const responseText = await response.text();
-          let responseData: { id?: string; status?: string } = {};
-
-          try {
-            responseData = responseText ? JSON.parse(responseText) : {};
-          } catch {
-            responseData = {};
-          }
-
-          const hasExecutionId = typeof responseData.id === 'string' && responseData.id.length > 0;
-          const statusText = responseData.status ?? '';
-          const indicatesExecution = statusText.toLowerCase().includes('trigger execution server');
-
-          if (!hasExecutionId && !indicatesExecution) {
-            throw new Error('Webhook accepted request but did not trigger workflow execution. Verify this is the published production webhook URL, not a test endpoint.');
-          }
-
-          lastError = null;
-          break;
-        } catch (error) {
-          lastError = error instanceof Error ? error : new Error('Unknown webhook submission error');
-
-          if (attempt < MAX_RETRIES) {
-            await sleep(500 * attempt);
-          }
-        } finally {
-          clearTimeout(timeoutId);
-        }
-      }
-
-      if (lastError) {
-        throw lastError;
+      if (!response.ok) {
+        throw new Error(`Webhook request failed with status ${response.status}`);
       }
 
       setStatus('success');
@@ -134,9 +95,12 @@ export default function ContactSection() {
       setTimeout(() => setStatus('idle'), 5000);
     } catch (error) {
       console.error('Error submitting form:', error);
-      setErrorMessage(error instanceof Error ? error.message : 'Unknown submission error');
+      setErrorMessage(error instanceof Error ? error.message : 'Submission failed. Please try again.');
       setStatus('error');
       setTimeout(() => setStatus('idle'), 5000);
+    } finally {
+      clearTimeout(timeoutId);
+      isSubmittingRef.current = false;
     }
   };
 
